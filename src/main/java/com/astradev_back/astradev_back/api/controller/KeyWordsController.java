@@ -3,6 +3,7 @@ package com.astradev_back.astradev_back.api.controller;
 import com.astradev_back.astradev_back.core.model.KeyWordsDto;
 import com.astradev_back.astradev_back.core.model.UsersDto;
 import com.astradev_back.astradev_back.core.service.KeyWordsService;
+import com.astradev_back.astradev_back.core.service.ParseTask;
 import com.astradev_back.astradev_back.core.service.UsersService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,13 @@ public class KeyWordsController {
 
     @Autowired
     private KeyWordsService keyWordsService;
+    @Autowired
+    private ParseTask parseTask;
 
+    @GetMapping
+    public void getData(){
+        parseTask.parseProducts("quasar vue");
+    }
 
     @ApiOperation(
             value = "Добавление ключевого слова"

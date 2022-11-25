@@ -11,25 +11,31 @@ import java.io.IOException;
 @Component
 public class ParseTask {
 
-
-    public String parseProducts(String category){
+    public String parseProducts(String request){
         try {
-            String url = String.format("https://www.detmir.ru/catalog/index/name/%s/", category);
-            url = "https://www.detmir.ru/catalog/index/name/mashiny/";
-            Document doc = Jsoup.connect(url)
-                    .userAgent("Yandex")
-                    .get();
-            System.out.println(doc.toString());
-//            Elements products = doc.getElementsByClass("tl to tp");
-            Elements products = doc.select("h4.sU");
+            String url = "https://habr.com/ru/search/?target_type=posts&order=relevance&q=" + request;
+            Document doc = Jsoup.connect(url).get();
+
+            Elements s = doc.select("article");
+
+//            for (Element el: s) {
+//                System.out.println(el);
+//            }
+
+            System.out.println( s );
+//            for (Element headline : newsHeadlines) {
+//                log("%s\n\t%s",
+//                        headline.attr("title"), headline.absUrl("href"));
+//            }
+//            Elements products = doc.select("h4.sU");
 //            Elements products = doc.select(".sU");
-            StringBuilder res = new StringBuilder();
-            for (Element el : products){
-                res.append(el.ownText());
-                System.out.println("ve");
-                System.out.println(el.ownText());
-            }
-            return res.toString();
+//            StringBuilder res = new StringBuilder();
+//            for (Element el : products){
+//                res.append(el.ownText());
+//                System.out.println("ve");
+//                System.out.println(el.ownText());
+//            }
+            return doc.toString();
 
         } catch (IOException e) {
             System.out.println("dfjevjkrf");
