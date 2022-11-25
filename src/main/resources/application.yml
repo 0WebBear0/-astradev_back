@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/astra_dev
+    username: astra_dev
+    password: astra_dev
