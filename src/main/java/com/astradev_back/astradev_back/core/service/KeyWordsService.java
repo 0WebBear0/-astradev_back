@@ -9,6 +9,8 @@ import com.astradev_back.astradev_back.db.entity.KeyWords;
 import com.astradev_back.astradev_back.db.entity.Users;
 import com.astradev_back.astradev_back.db.repository.KeyWordsRepository;
 import com.astradev_back.astradev_back.db.repository.UsersRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -47,7 +49,7 @@ public class KeyWordsService {
 
     }
 
-    public List<HHModel> getHHByUsr(String name){
+    public List<HHModel> getHHByUsr(String name) throws JsonProcessingException {
         Users user = usersRepository.getByName(name);
         List<String> words = users_keyWordsService.getWordsByUser(user.getId());
         List<HHModel> result = new ArrayList<>();
@@ -56,7 +58,7 @@ public class KeyWordsService {
         return result;
     }
 
-    public HHModel getHh(String word){
+    public HHModel getHh(String word) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -76,6 +78,7 @@ public class KeyWordsService {
                 String.class);
 
         String body = responseEntity.getBody();
+        body.replaceAll("\"working_days\":.*],", "");
 
         //Founds
         int founds = Integer.parseInt(body.substring(
@@ -84,11 +87,11 @@ public class KeyWordsService {
         ));
 
         String[] elems = body.split("[,\\[]\\{\"id\":");
-        int maxSalary = 0;
-        int sumMax = 0;
+        double maxSalary = 0;
+        double sumMax = 0;
 
         for (String elem : Arrays.copyOfRange(elems, 1, elems.length)) {
-            int salary = Integer.parseInt(elem.substring(elem.indexOf("\"salary\":{\"from\":")+17,
+            double salary = Double.parseDouble(elem.substring(elem.indexOf("\"salary\":{\"from\":")+17,
                 elem.indexOf("\"to\":")-1));
 
             String currency = elem.substring(elem.indexOf("\"currency\":")+12,
@@ -104,20 +107,22 @@ public class KeyWordsService {
                 bodyCur = responseEntityCur.getBody();
                 bodyCur = bodyCur.substring(bodyCur.indexOf("RUB")+5, bodyCur.indexOf("RUB")+10);
             }
-            salary *= Integer.parseInt(bodyCur);
+            salary *= Double.parseDouble(bodyCur);
             if (Objects.equals(elem, elems[1]))
                 maxSalary = salary;
             sumMax+=salary;
         }
 
-        int minSalary = 0;
-        int sumMin = 0;
+        double minSalary = 0;
+        double sumMin = 0;
 
         body = responseEntityMinSal.getBody();
+        body = body.replaceAll("\"working_days\":.*]", "");
         elems = body.split("[,\\[]\\{\"id\":");
-
+        System.out.println(body);
         for (String elem : Arrays.copyOfRange(elems, 1, elems.length)) {
-            int salary = Integer.parseInt(elem.substring(elem.indexOf("\"salary\":{\"from\":")+17,
+            System.out.println(elem);
+            double salary = Double.parseDouble(elem.substring(elem.indexOf("\"salary\":{\"from\":")+17,
                     elem.indexOf("\"to\":")-1));
 
             String currency = elem.substring(elem.indexOf("\"currency\":")+12,
@@ -133,7 +138,7 @@ public class KeyWordsService {
                 bodyCur = responseEntityCur.getBody();
                 bodyCur = bodyCur.substring(bodyCur.indexOf("RUB")+5, bodyCur.indexOf("RUB")+10);
             }
-            salary *= Integer.parseInt(bodyCur);
+            salary *= Double.parseDouble(bodyCur);
             if (Objects.equals(elem, elems[1]))
                 maxSalary = salary;
             sumMin+=salary;

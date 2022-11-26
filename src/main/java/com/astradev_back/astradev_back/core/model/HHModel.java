@@ -10,11 +10,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class HHModel {
     private int founds;
-    private int maxSal;
-    private int minSal;
-    private int avgSal;
+    private double maxSal;
+    private double minSal;
+    private double avgSal;
 
-    public HHModel(int founds, int maxSal, int minSal, int avgSal) {
+    public HHModel(int founds, double maxSal, double minSal, double avgSal) {
         this.founds = founds;
         this.maxSal = maxSal;
         this.minSal = minSal;

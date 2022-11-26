@@ -6,6 +6,7 @@ import com.astradev_back.astradev_back.core.model.UsersDto;
 import com.astradev_back.astradev_back.core.service.KeyWordsService;
 import com.astradev_back.astradev_back.core.service.ParseTask;
 import com.astradev_back.astradev_back.core.service.UsersService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,7 @@ public class KeyWordsController {
             value = "Обращение к hh.ru"
     )
     @RequestMapping(value= "/hh", method = RequestMethod.GET)
-    public List<HHModel> getDataHh(@RequestParam String name){
+    public List<HHModel> getDataHh(@RequestParam String name) throws JsonProcessingException {
         return keyWordsService.getHHByUsr(name);
     }
 
