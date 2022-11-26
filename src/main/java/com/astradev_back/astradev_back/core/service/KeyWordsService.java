@@ -7,18 +7,22 @@ import com.astradev_back.astradev_back.core.model.UsersDto;
 import com.astradev_back.astradev_back.db.entity.KeyWords;
 import com.astradev_back.astradev_back.db.repository.KeyWordsRepository;
 import com.astradev_back.astradev_back.db.repository.UsersRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class KeyWordsService {
 
     static RestTemplate restTemplate = new RestTemplate();
-    static String http = "https://api.hh.ru/";
+    static String httpHh = "https://api.hh.ru/vacancies/";
+    static String httpCur = "https://open.er-api.com/v6/latest/";
 
     @Autowired
     private KeyWordsRepository keyWordsRepository;
@@ -48,14 +52,45 @@ public class KeyWordsService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(http + "books?search=",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(httpHh +
+                        "?text=frontend" + "&only_with_salary=true" +
+                        "&order_by=salary_desc",
                 HttpMethod.GET,
                 requestEntity,
                 String.class);
 
         String body = responseEntity.getBody();
-        body = body.substring(body.indexOf("results") + 10,
-                body.length() - 2);
+        System.out.println(body);
+        int founds = Integer.parseInt(body.substring(
+                body.indexOf("\"found\":")+8,
+                body.indexOf("\"pages\":")-1
+        ));
+        System.out.printf("founds %s\n", founds);
+
+        String[] elems = body.split("[,\\[]\\{\"id\":");
+
+        int averageSalary = 0;
+
+        for (String elem : Arrays.copyOfRange(elems, 1, elems.length)) {
+            System.out.println(elem);
+            int salary = Integer.parseInt(elem.substring(elem.indexOf("\"salary\":{\"from\":")+17,
+                elem.indexOf("\"to\":")-1));
+
+            String currency = elem.substring(elem.indexOf("\"currency\":")+12,
+                    elem.indexOf("\"gross\":")-2);
+
+            if (!currency.equals("RUR")){
+                ResponseEntity<String> responseEntityCur = restTemplate.exchange(httpCur + currency,
+                        HttpMethod.GET,
+                        requestEntity,
+                        String.class);
+
+                String bodyCur = responseEntityCur.getBody();
+                bodyCur = bodyCur.substring(bodyCur.indexOf("RUB")+5, bodyCur.indexOf("RUB")+10);
+                System.out.println(bodyCur);
+            }
+
+        }
     }
 
 //    public UsersDto updateUser(UsersDto user){

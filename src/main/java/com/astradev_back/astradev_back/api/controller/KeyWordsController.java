@@ -41,7 +41,7 @@ public class KeyWordsController {
     @ApiOperation(
             value = "Парсинг хабра"
     )
-    @RequestMapping(value= "/hh")
+    @RequestMapping(value= "/hh", method = RequestMethod.GET)
     public void getDataHh(){
         keyWordsService.getHh();
     }
