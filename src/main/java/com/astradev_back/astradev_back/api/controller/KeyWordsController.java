@@ -1,5 +1,6 @@
 package com.astradev_back.astradev_back.api.controller;
 
+import com.astradev_back.astradev_back.core.model.HHModel;
 import com.astradev_back.astradev_back.core.model.KeyWordsDto;
 import com.astradev_back.astradev_back.core.model.UsersDto;
 import com.astradev_back.astradev_back.core.service.KeyWordsService;
@@ -39,11 +40,11 @@ public class KeyWordsController {
     }
 
     @ApiOperation(
-            value = "Парсинг хабра"
+            value = "Обращение к hh.ru"
     )
     @RequestMapping(value= "/hh", method = RequestMethod.GET)
-    public void getDataHh(){
-        keyWordsService.getHh();
+    public List<HHModel> getDataHh(@RequestParam String name){
+        return keyWordsService.getHHByUsr(name);
     }
 
 

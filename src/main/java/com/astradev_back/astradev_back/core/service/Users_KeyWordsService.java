@@ -6,6 +6,7 @@ import com.astradev_back.astradev_back.core.model.KeyWordsDto;
 import com.astradev_back.astradev_back.core.model.UsersDto;
 import com.astradev_back.astradev_back.core.model.Users_KeyWordsDto;
 import com.astradev_back.astradev_back.db.entity.KeyWords;
+import com.astradev_back.astradev_back.db.entity.Users_KeyWords;
 import com.astradev_back.astradev_back.db.repository.UsersRepository;
 import com.astradev_back.astradev_back.db.repository.Users_KeyWordsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,11 @@ public class Users_KeyWordsService {
 //        return usersMapper.mapAsList(usersRepository.findAll(), UsersDto.class);
 //    }
 //
-    public List<String> getWordsByUser(Long userId){
-        List<KeyWords> words = users_keyWordsRepository.getWordsByUser(userId);
+    public List<String> getWordsByUser(Long user){
+        List<Users_KeyWords> words = users_keyWordsRepository.getWordsByUser(user);
         List<String> result = new ArrayList<>();
-        for (KeyWords word:words)
-            result.add(word.getWord());
+        for (Users_KeyWords word:words)
+            result.add(word.getWord().getWord());
         return result;
     }
 

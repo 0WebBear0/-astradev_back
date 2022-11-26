@@ -23,7 +23,7 @@ public class Users_KeyWords {
     private Users user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "keyword")
-    private KeyWords keyWord;
+    @JoinColumn(name = "word")
+    private KeyWords word;
 
 }
