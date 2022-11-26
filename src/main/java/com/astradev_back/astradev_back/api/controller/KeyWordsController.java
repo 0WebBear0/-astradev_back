@@ -17,9 +17,14 @@ public class KeyWordsController {
 
     @Autowired
     private KeyWordsService keyWordsService;
+
     @Autowired
     private ParseTask parseTask;
 
+
+    @ApiOperation(
+            value = "Парсинг хабра"
+    )
     @GetMapping
     public void getData(){
         parseTask.parseProducts("quasar vue");
@@ -32,6 +37,16 @@ public class KeyWordsController {
     public void addKeyWord(@RequestParam String word, @RequestParam String userName){
         keyWordsService.addKeyWord(word, userName);
     }
+
+    @ApiOperation(
+            value = "Парсинг хабра"
+    )
+    @RequestMapping(value= "/hh")
+    public void getDataHh(){
+        keyWordsService.getHh();
+    }
+
+
 
 //    @ApiOperation(
 //            value = "Получение всех ключевых слов"

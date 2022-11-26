@@ -8,12 +8,17 @@ import com.astradev_back.astradev_back.db.entity.KeyWords;
 import com.astradev_back.astradev_back.db.repository.KeyWordsRepository;
 import com.astradev_back.astradev_back.db.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 @Service
 public class KeyWordsService {
+
+    static RestTemplate restTemplate = new RestTemplate();
+    static String http = "https://api.hh.ru/";
 
     @Autowired
     private KeyWordsRepository keyWordsRepository;
@@ -35,6 +40,22 @@ public class KeyWordsService {
         Long wordId = keyWordsRepository.getByWord(word).getId();
         if (!users_keyWordsService.getWordsByUser(userId).contains(word))
             users_keyWordsService.add(wordId, userId);
+    }
+
+
+    public void getHh(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(http + "books?search=",
+                HttpMethod.GET,
+                requestEntity,
+                String.class);
+
+        String body = responseEntity.getBody();
+        body = body.substring(body.indexOf("results") + 10,
+                body.length() - 2);
     }
 
 //    public UsersDto updateUser(UsersDto user){
