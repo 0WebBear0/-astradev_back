@@ -126,27 +126,30 @@ public class KeyWordsService {
         double sumMax = 0;
 
         for (String elem : Arrays.copyOfRange(elems, 1, elems.length)) {
-            double salary = Double.parseDouble(elem.substring(elem.indexOf("\"salary\":{\"from\":")+17,
-                elem.indexOf("\"to\":")-1));
+            String from = elem.substring(elem.indexOf("\"salary\":{\"from\":") + 17, elem.indexOf("\"to\":") - 1);
+            if (!from.equals("null")) {
+                double salary = Double.parseDouble(from);
 
-            String currency = elem.substring(elem.indexOf("\"currency\":")+12,
-                    elem.indexOf("\"gross\":")-2);
-            String bodyCur = "1";
+                String currency = elem.substring(elem.indexOf("\"currency\":")+12,
+                        elem.indexOf("\"gross\":")-2);
+                String bodyCur = "1";
 
-            if (!currency.equals("RUR")){
-                ResponseEntity<String> responseEntityCur = restTemplate.exchange(httpCur + currency,
-                        HttpMethod.GET,
-                        requestEntity,
-                        String.class);
+                if (!currency.equals("RUR")){
+                    ResponseEntity<String> responseEntityCur = restTemplate.exchange(httpCur + currency,
+                            HttpMethod.GET,
+                            requestEntity,
+                            String.class);
 
-                bodyCur = responseEntityCur.getBody();
-                bodyCur = bodyCur.substring(bodyCur.indexOf("RUB")+5, bodyCur.indexOf("RUB")+10);
+                    bodyCur = responseEntityCur.getBody();
+                    bodyCur = bodyCur.substring(bodyCur.indexOf("RUB")+5, bodyCur.indexOf("RUB")+10);
+                }
+                salary *= Double.parseDouble(bodyCur);
+                if (!point)
+                    maxSalary = salary;
+                point = true;
+                sumMax+=salary;
             }
-            salary *= Double.parseDouble(bodyCur);
-            if (!point)
-                maxSalary = salary;
-            point = true;
-            sumMax+=salary;
+            sumMax+=100000;
         }
 
         double minSalary = 0;
@@ -185,7 +188,7 @@ public class KeyWordsService {
             }
             sumMin+=13000;
         }
-        return new HHModel(word, founds, maxSalary, minSalary==0?13000:minSalary, (sumMax+sumMin)/40);
+        return new HHModel(word, founds, maxSalary==0?100000:maxSalary, minSalary==0?13000:minSalary, (sumMax+sumMin)/40);
     }
 
 //    public UsersDto updateUser(UsersDto user){
