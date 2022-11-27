@@ -33,14 +33,14 @@ public class Users_KeyWordsService {
 //        return usersMapper.map(usersRepository.saveAndFlush(existingUser), UsersDto.class);
 //    }
 
-//    public List<UsersDto> getAll(){
-//        return usersMapper.mapAsList(usersRepository.findAll(), UsersDto.class);
-//    }
+    public List<Users_KeyWordsDto> getAll(){
+        return users_keyWordsMapper.mapAsList(users_keyWordsRepository.findAll(), Users_KeyWordsDto.class);
+    }
 //
     public List<String> getWordsByUser(Long userId){
         List<KeyWords> words = users_keyWordsRepository.getWordsByUser(userId);
         List<String> result = new ArrayList<>();
-        for (KeyWords word:words)
+        for (KeyWords word : words)
             result.add(word.getWord());
         return result;
     }

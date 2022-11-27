@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 @Repository
 public interface UsersRepository extends JpaRepository<Users, Long> {
 
-    @Query(value = "Select n from Users n where n.name = :name")
+    @Query(value = "Select * from Users n where n.name = :name", nativeQuery = true)
     Users getByName(@Param("name") String name);
 
     @Modifying

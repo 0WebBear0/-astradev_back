@@ -35,28 +35,30 @@ public class KeyWordsService {
 
     public void addKeyWord(String word, String name){
         Long userId = usersRepository.getByName(name).getId();
-        if (keyWordsRepository.getByWord(word) == null)
+        if (keyWordsRepository.getByWord(word) == null) {
             keyWordsRepository.add(word);
+        }
         Long wordId = keyWordsRepository.getByWord(word).getId();
-        if (!users_keyWordsService.getWordsByUser(userId).contains(word))
+        if (!users_keyWordsService.getWordsByUser(userId).contains(word)) {
             users_keyWordsService.add(wordId, userId);
+        }
     }
 
 
-    public void getHh(){
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(http + "books?search=",
-                HttpMethod.GET,
-                requestEntity,
-                String.class);
-
-        String body = responseEntity.getBody();
-        body = body.substring(body.indexOf("results") + 10,
-                body.length() - 2);
-    }
+//    public void getHh(){
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//
+//        HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
+//        ResponseEntity<String> responseEntity = restTemplate.exchange(http + "books?search=",
+//                HttpMethod.GET,
+//                requestEntity,
+//                String.class);
+//
+//        String body = responseEntity.getBody();
+//        body = body.substring(body.indexOf("results") + 10,
+//                body.length() - 2);
+//    }
 
 //    public UsersDto updateUser(UsersDto user){
 //        Users existingUser = usersRepository.getByTgID(user.getId_telegram());

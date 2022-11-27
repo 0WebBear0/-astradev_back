@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "Users_KeyWords")
+@Table(name = "Users_KeyWords", schema = "public")
 public class Users_KeyWords {
 
     @Id
@@ -23,7 +23,7 @@ public class Users_KeyWords {
     private Users user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "keyword")
-    private KeyWords keyWord;
+    @JoinColumn(name = "word")
+    private KeyWords word;
 
 }

@@ -1,28 +1,39 @@
 package com.astradev_back.astradev_back.core.service;
 
+import com.astradev_back.astradev_back.core.model.HabrCardDto;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ParseTask {
 
-    public String parseProducts(String request){
+    public List<HabrCardDto> parseProducts(List<String> requestList){
         try {
-            String url = "https://habr.com/ru/search/?target_type=posts&order=relevance&q=" + request;
-            Document doc = Jsoup.connect(url).get();
+            List<HabrCardDto> habrCardDtos = new ArrayList<>();
+            for (String request : requestList) {
+                String url = "https://habr.com/ru/search/?target_type=posts&order=relevance&q=" + request;
+                Document doc = Jsoup.connect(url).get();
 
-            Elements s = doc.select("article");
+                Element title = doc.select("h2.tm-article-snippet__title").first();
+                String articleUrl = title.select("a[href].tm-article-snippet__title-link").attr("href");
+                Element body = doc.select("div.article-formatted-body").first();
 
+                HabrCardDto cardDto = new HabrCardDto();
+                cardDto.setBody(body.toString());
+                cardDto.setUrl("habr.com" + articleUrl);
+                cardDto.setTitle(title.text());
+
+                habrCardDtos.add(cardDto);
 //            for (Element el: s) {
 //                System.out.println(el);
 //            }
 
-            System.out.println( s );
 //            for (Element headline : newsHeadlines) {
 //                log("%s\n\t%s",
 //                        headline.attr("title"), headline.absUrl("href"));
@@ -35,11 +46,13 @@ public class ParseTask {
 //                System.out.println("ve");
 //                System.out.println(el.ownText());
 //            }
-            return doc.toString();
+            }
+
+            return habrCardDtos;
 
         } catch (IOException e) {
             System.out.println("dfjevjkrf");
         }
-        return "er";
+        return null;
     }
 }

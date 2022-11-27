@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Users_KeyWordsDto {
 
-    @ApiModelProperty("id keyWord")
+    @ApiModelProperty("id users_keywords")
     private Long id;
 
     @ApiModelProperty("user")

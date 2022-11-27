@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 @Repository
 public interface KeyWordsRepository extends JpaRepository<KeyWords, Long> {
 
-    @Query(value = "Select n from KeyWords n where n.word = :word")
+    @Query(value = "Select * from keywords n where n.word = :word", nativeQuery = true)
     KeyWords getByWord(@Param("word") String word);
 
     @Modifying

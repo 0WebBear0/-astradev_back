@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "KeyWords")
+@Table(name = "KeyWords", schema = "public")
 public class KeyWords {
 
     @Id
