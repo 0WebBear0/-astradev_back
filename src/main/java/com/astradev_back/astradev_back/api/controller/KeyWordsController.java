@@ -1,6 +1,7 @@
 package com.astradev_back.astradev_back.api.controller;
 
 import com.astradev_back.astradev_back.core.model.HabrCardDto;
+import com.astradev_back.astradev_back.core.model.HHModel;
 import com.astradev_back.astradev_back.core.model.KeyWordsDto;
 import com.astradev_back.astradev_back.core.model.UsersDto;
 import com.astradev_back.astradev_back.core.model.Users_KeyWordsDto;
@@ -8,6 +9,7 @@ import com.astradev_back.astradev_back.core.service.KeyWordsService;
 import com.astradev_back.astradev_back.core.service.ParseTask;
 import com.astradev_back.astradev_back.core.service.UsersService;
 import com.astradev_back.astradev_back.core.service.Users_KeyWordsService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +39,7 @@ public class KeyWordsController {
 //        keywordsTest.add("vue");
 //        keywordsTest.add("java");
 //        keywordsTest.add("css");
-//        keywords
-    Test.add("quasar");
+//        keywordsTest.add("quasar");
 //        keywordsTest.add("angular");
 //        keywordsTest.add("less");
 //        keywordsTest.add("python");
@@ -46,11 +47,6 @@ public class KeyWordsController {
 //        keywordsTest.add("tensorflow");
 //        keywordsTest.add("machine learning");
         return parseTask.parseProducts(keywords);
-    }
-
-    @GetMapping("/all")
-    public List<Users_KeyWordsDto> getAll() {
-        return users_keyWordsService.getAll();
     }
 
     @ApiOperation(
@@ -61,13 +57,13 @@ public class KeyWordsController {
         keyWordsService.addKeyWord(word, userName);
     }
 
-//    @ApiOperation(
-//            value = "Парсинг hh"
-//    )
-//    @RequestMapping(value= "/hh")
-//    public void getDataHh(){
-//        keyWordsService.getHh();
-//    }
+    @ApiOperation(
+            value = "Обращение к hh.ru"
+    )
+    @RequestMapping(value= "/hh", method = RequestMethod.GET)
+    public List<HHModel> getDataHh(@RequestParam String name) throws JsonProcessingException {
+        return keyWordsService.getHHByUsr(name);
+    }
 
 
 

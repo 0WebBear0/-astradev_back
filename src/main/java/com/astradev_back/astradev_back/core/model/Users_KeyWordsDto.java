@@ -16,6 +16,6 @@ public class Users_KeyWordsDto {
     @ApiModelProperty("user")
     private UsersDto user;
 
-    @ApiModelProperty("keyword")
-    private KeyWordsDto keyWord;
+    @ApiModelProperty("word")
+    private KeyWordsDto word;
 }

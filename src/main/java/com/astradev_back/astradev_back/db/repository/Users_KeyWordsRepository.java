@@ -14,8 +14,8 @@ import java.util.List;
 @Repository
 public interface Users_KeyWordsRepository extends JpaRepository<Users_KeyWords, Long> {
 
-    @Query(value = "Select u.word from Users_KeyWords u where u.\"user\" = :user", nativeQuery = true)
-    List<KeyWords> getWordsByUser(@Param("user") Long user);
+    @Query(value = "Select * from Users_KeyWords where \"user\" = :user", nativeQuery = true)
+    List<Users_KeyWords> getWordsByUser(@Param("user") Long user);
 
     @Modifying
     @Transactional
