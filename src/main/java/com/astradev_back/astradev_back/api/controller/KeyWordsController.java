@@ -33,6 +33,7 @@ public class KeyWordsController {
     @ApiOperation(
             value = "Парсинг хабра"
     )@GetMapping("/{id}")
+    @CrossOrigin
     public List<HabrCardDto> getData(@PathVariable Long id){
         List<String> keywords = users_keyWordsService.getWordsByUser(id);
 //        List<String> keywordsTest = new ArrayList<>();
@@ -49,6 +50,7 @@ public class KeyWordsController {
         return parseTask.parseProducts(keywords);
     }
 
+    @CrossOrigin
     @ApiOperation(
             value = "Добавление ключевого слова"
     )
@@ -60,6 +62,7 @@ public class KeyWordsController {
     @ApiOperation(
             value = "Обращение к hh.ru"
     )
+    @CrossOrigin
     @RequestMapping(value= "/hh", method = RequestMethod.GET)
     public List<HHModel> getDataHh(@RequestParam String name) throws JsonProcessingException {
         return keyWordsService.getHHByUsr(name);

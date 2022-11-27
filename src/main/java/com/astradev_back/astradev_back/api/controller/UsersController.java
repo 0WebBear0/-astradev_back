@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/user")
 public class UsersController {
 
@@ -28,6 +29,7 @@ public class UsersController {
     @ApiOperation(
             value = "Добавление пользователя"
     )
+    @CrossOrigin
     @PostMapping
     public UsersDto signUp(@RequestBody UsersDto user){
         return usersService.signUp(user);
@@ -36,6 +38,7 @@ public class UsersController {
     @ApiOperation(
             value = "Получение всех пользователей"
     )
+    @CrossOrigin
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public List<UsersDto> getAll(){
         return usersService.getAll();
@@ -44,6 +47,7 @@ public class UsersController {
     @ApiOperation(
             value = "Получение пользователя по name"
     )
+    @CrossOrigin
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
     public UsersDto getByName(@PathVariable String name){
         return usersService.getByName(name);
