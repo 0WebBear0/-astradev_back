@@ -27,10 +27,12 @@ public class KeyWordsController {
     @ApiOperation(
             value = "обращение к habr.com"
     )@GetMapping("/habr")
+    @CrossOrigin
     public List<HabrCardDto> getData(@RequestParam String name){
         return keyWordsService.getHabrByUsr(name);
     }
 
+    @CrossOrigin
     @ApiOperation(
             value = "Добавление ключевого слова"
     )
@@ -42,6 +44,7 @@ public class KeyWordsController {
     @ApiOperation(
             value = "Обращение к hh.ru"
     )
+    @CrossOrigin
     @RequestMapping(value= "/hh", method = RequestMethod.GET)
     public List<HHModel> getDataHh(@RequestParam String name) throws JsonProcessingException {
         return keyWordsService.getHHByUsr(name);

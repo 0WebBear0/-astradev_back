@@ -9,12 +9,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class HHModel {
+    private String word;
     private int founds;
     private double maxSal;
     private double minSal;
     private double avgSal;
 
-    public HHModel(int founds, double maxSal, double minSal, double avgSal) {
+    public HHModel(String word, int founds, double maxSal, double minSal, double avgSal) {
+        this.word = word;
         this.founds = founds;
         this.maxSal = maxSal;
         this.minSal = minSal;

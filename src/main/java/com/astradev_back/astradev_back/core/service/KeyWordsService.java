@@ -39,6 +39,10 @@ public class KeyWordsService {
     @Autowired
     private KeyWordsMapper keyWordsMapper;
 
+    public void addKeyWord(String[] words, String name){
+        for (String word:words)
+            addKeyWord(word, name);
+    }
 
     public void addKeyWord(String word, String name){
         Long userId = usersRepository.getByName(name).getId();
@@ -90,6 +94,8 @@ public class KeyWordsService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        boolean point = false;
+
         HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(httpHh +
                         "?text="+ word + "&only_with_salary=true" +
@@ -100,7 +106,7 @@ public class KeyWordsService {
 
         ResponseEntity<String> responseEntityMinSal = restTemplate.exchange(httpHh +
                         "?text="+ word + "&only_with_salary=true" +
-                        "&order_by=salary_asc",
+                        "&order_by=salary_asc"+"&salary=15000&currency=RUR",
                 HttpMethod.GET,
                 requestEntity,
                 String.class);
@@ -136,8 +142,9 @@ public class KeyWordsService {
                 bodyCur = bodyCur.substring(bodyCur.indexOf("RUB")+5, bodyCur.indexOf("RUB")+10);
             }
             salary *= Double.parseDouble(bodyCur);
-            if (Objects.equals(elem, elems[1]))
+            if (!point)
                 maxSalary = salary;
+            point = true;
             sumMax+=salary;
         }
 
@@ -150,29 +157,34 @@ public class KeyWordsService {
         System.out.println(body);
         for (String elem : Arrays.copyOfRange(elems, 1, elems.length)) {
             System.out.println(elem);
-            double salary = Double.parseDouble(elem.substring(elem.indexOf("\"salary\":{\"from\":")+17,
-                    elem.indexOf("\"to\":")-1));
+            String from = elem.substring(elem.indexOf("\"salary\":{\"from\":") + 17, elem.indexOf("\"to\":") - 1);
+            if (!from.equals("null")){
+                System.out.println("warn");
+                double salary = Double.parseDouble(from);
 
-            String currency = elem.substring(elem.indexOf("\"currency\":")+12,
-                    elem.indexOf("\"gross\":")-2);
-            String bodyCur = "1";
+                String currency = elem.substring(elem.indexOf("\"currency\":")+12,
+                        elem.indexOf("\"gross\":")-2);
+                String bodyCur = "1";
 
-            if (!currency.equals("RUR")){
-                ResponseEntity<String> responseEntityCur = restTemplate.exchange(httpCur + currency,
-                        HttpMethod.GET,
-                        requestEntity,
-                        String.class);
+                if (!currency.equals("RUR")){
+                    ResponseEntity<String> responseEntityCur = restTemplate.exchange(httpCur + currency,
+                            HttpMethod.GET,
+                            requestEntity,
+                            String.class);
 
-                bodyCur = responseEntityCur.getBody();
-                bodyCur = bodyCur.substring(bodyCur.indexOf("RUB")+5, bodyCur.indexOf("RUB")+10);
+                    bodyCur = responseEntityCur.getBody();
+                    bodyCur = bodyCur.substring(bodyCur.indexOf("RUB")+5, bodyCur.indexOf("RUB")+10);
+                }
+                salary *= Double.parseDouble(bodyCur);
+                if (point){
+                    minSalary = salary;
+                    point = false;
+                }
+                sumMin+=salary;
             }
-            salary *= Double.parseDouble(bodyCur);
-            if (Objects.equals(elem, elems[1]))
-                maxSalary = salary;
-            sumMin+=salary;
+            sumMin+=13000;
         }
-        System.out.printf("fnds %s  ms %s  mns %s  avgs %s", founds, maxSalary, minSalary, (sumMax+sumMin)/40);
-        return new HHModel(founds, maxSalary, minSalary, (sumMax+sumMin)/40);
+        return new HHModel(word, founds, maxSalary, minSalary==0?13000:minSalary, (sumMax+sumMin)/40);
     }
 
 //    public UsersDto updateUser(UsersDto user){
