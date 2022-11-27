@@ -2,15 +2,19 @@ package com.astradev_back.astradev_back.core.service;
 
 import com.astradev_back.astradev_back.core.mapper.KeyWordsMapper;
 import com.astradev_back.astradev_back.core.model.HHModel;
+import com.astradev_back.astradev_back.core.model.HabrCardDto;
 import com.astradev_back.astradev_back.db.entity.Users;
 import com.astradev_back.astradev_back.db.repository.KeyWordsRepository;
 import com.astradev_back.astradev_back.db.repository.UsersRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,6 +56,34 @@ public class KeyWordsService {
         for (String word:words)
             result.add(getHh(word));
         return result;
+    }
+
+    public List<HabrCardDto> getHabrByUsr(String name) {
+        Users user = usersRepository.getByName(name);
+        List<String> words = users_keyWordsService.getWordsByUser(user.getId());
+        List<HabrCardDto> habrCardDtos = new ArrayList<>();
+        for (String request : words) {
+            String url = "https://habr.com/ru/search/?target_type=posts&order=relevance&q=" + request;
+            Document doc = null;
+            try {
+                doc = Jsoup.connect(url).get();
+            } catch (IOException e) {
+                return null;
+            }
+
+            Element title = doc.select("h2.tm-article-snippet__title").first();
+            String articleUrl = title.select("a[href].tm-article-snippet__title-link").attr("href");
+            Element body = doc.select("div.article-formatted-body").first();
+
+            HabrCardDto cardDto = new HabrCardDto();
+            cardDto.setBody(body.toString());
+            cardDto.setUrl("habr.com" + articleUrl);
+            cardDto.setTitle(title.text());
+
+            habrCardDtos.add(cardDto);
+        }
+
+        return habrCardDtos;
     }
 
     public HHModel getHh(String word) {

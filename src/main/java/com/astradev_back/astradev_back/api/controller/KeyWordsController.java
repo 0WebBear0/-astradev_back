@@ -1,20 +1,14 @@
 package com.astradev_back.astradev_back.api.controller;
 
-import com.astradev_back.astradev_back.core.model.HabrCardDto;
 import com.astradev_back.astradev_back.core.model.HHModel;
-import com.astradev_back.astradev_back.core.model.KeyWordsDto;
-import com.astradev_back.astradev_back.core.model.UsersDto;
-import com.astradev_back.astradev_back.core.model.Users_KeyWordsDto;
+import com.astradev_back.astradev_back.core.model.HabrCardDto;
 import com.astradev_back.astradev_back.core.service.KeyWordsService;
-import com.astradev_back.astradev_back.core.service.ParseTask;
-import com.astradev_back.astradev_back.core.service.UsersService;
 import com.astradev_back.astradev_back.core.service.Users_KeyWordsService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,29 +18,17 @@ public class KeyWordsController {
     @Autowired
     private KeyWordsService keyWordsService;
 
-    @Autowired
-    private ParseTask parseTask;
+//    @Autowired
+//    private ParseTask parseTask;
 
     @Autowired
     private Users_KeyWordsService users_keyWordsService;
 
     @ApiOperation(
-            value = "Парсинг хабра"
-    )@GetMapping("/{id}")
-    public List<HabrCardDto> getData(@PathVariable Long id){
-        List<String> keywords = users_keyWordsService.getWordsByUser(id);
-//        List<String> keywordsTest = new ArrayList<>();
-//        keywordsTest.add("vue");
-//        keywordsTest.add("java");
-//        keywordsTest.add("css");
-//        keywordsTest.add("quasar");
-//        keywordsTest.add("angular");
-//        keywordsTest.add("less");
-//        keywordsTest.add("python");
-//        keywordsTest.add("keras");
-//        keywordsTest.add("tensorflow");
-//        keywordsTest.add("machine learning");
-        return parseTask.parseProducts(keywords);
+            value = "обращение к habr.com"
+    )@GetMapping("/habr")
+    public List<HabrCardDto> getData(@RequestParam String name){
+        return keyWordsService.getHabrByUsr(name);
     }
 
     @ApiOperation(
