@@ -81,7 +81,7 @@ public class KeyWordsService {
 
             HabrCardDto cardDto = new HabrCardDto();
             cardDto.setWord(request);
-            cardDto.setBody(body.toString());
+            cardDto.setBody(body.text());
             cardDto.setUrl("habr.com" + articleUrl);
             cardDto.setTitle(title.text());
 
