@@ -36,17 +36,6 @@ public class KeyWordsController {
     @CrossOrigin
     public List<HabrCardDto> getData(@PathVariable Long id){
         List<String> keywords = users_keyWordsService.getWordsByUser(id);
-//        List<String> keywordsTest = new ArrayList<>();
-//        keywordsTest.add("vue");
-//        keywordsTest.add("java");
-//        keywordsTest.add("css");
-//        keywordsTest.add("quasar");
-//        keywordsTest.add("angular");
-//        keywordsTest.add("less");
-//        keywordsTest.add("python");
-//        keywordsTest.add("keras");
-//        keywordsTest.add("tensorflow");
-//        keywordsTest.add("machine learning");
         return parseTask.parseProducts(keywords);
     }
 

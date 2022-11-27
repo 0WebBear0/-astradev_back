@@ -35,6 +35,10 @@ public class KeyWordsService {
     @Autowired
     private KeyWordsMapper keyWordsMapper;
 
+    public void addKeyWord(String[] words, String name){
+        for (String word:words)
+            addKeyWord(word, name);
+    }
 
     public void addKeyWord(String word, String name){
         Long userId = usersRepository.getByName(name).getId();
@@ -140,7 +144,7 @@ public class KeyWordsService {
             sumMin+=salary;
         }
         System.out.printf("fnds %s  ms %s  mns %s  avgs %s", founds, maxSalary, minSalary, (sumMax+sumMin)/40);
-        return new HHModel(founds, maxSalary, minSalary, (sumMax+sumMin)/40);
+        return new HHModel(word, founds, maxSalary, minSalary, (sumMax+sumMin)/40);
     }
 
 //    public UsersDto updateUser(UsersDto user){
