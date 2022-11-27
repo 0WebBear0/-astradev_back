@@ -44,7 +44,7 @@ public class KeyWordsController {
             value = "Добавление ключевого слова"
     )
     @PostMapping
-    public void addKeyWord(@RequestParam String word, @RequestParam String userName){
+    public void addKeyWord(@RequestParam String[] word, @RequestParam String userName){
         keyWordsService.addKeyWord(word, userName);
     }
 
