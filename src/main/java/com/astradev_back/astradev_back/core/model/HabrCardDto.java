@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HabrCardDto {
-
+    private String word;
     @ApiModelProperty("Название статьи")
     private String title;
     @ApiModelProperty("Часть статьи")

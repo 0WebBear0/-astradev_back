@@ -80,6 +80,7 @@ public class KeyWordsService {
             Element body = doc.select("div.article-formatted-body").first();
 
             HabrCardDto cardDto = new HabrCardDto();
+            cardDto.setWord(request);
             cardDto.setBody(body.toString());
             cardDto.setUrl("habr.com" + articleUrl);
             cardDto.setTitle(title.text());
